@@ -25,29 +25,23 @@ class StarterSite extends TimberSite {
 		add_filter( 'get_twig', array( $this, 'add_to_twig' ) );
 		add_action( 'init', array( $this, 'register_post_types' ) );
 		add_action( 'init', array( $this, 'register_taxonomies' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+
 		parent::__construct();
 	}
 
 	function register_post_types() {
-		//this is where you can register custom post types
+		// This is where you can register custom post types
 	}
 
 	function register_taxonomies() {
-		//this is where you can register custom taxonomies
+		// This is where you can register custom taxonomies
 	}
 
 	function add_to_context( $context ) {
-		$context['foo'] = 'bar';
-		$context['stuff'] = 'I am a value set in your functions.php file';
-		$context['notes'] = 'These values are available everytime you call Timber::get_context();';
-		$context['menu'] = new TimberMenu();
-		$context['site'] = $this;
-		return $context;
-	}
+		// These values are available everytime you call Timber::get_context();
 
-	function myfoo( $text ) {
-		$text .= ' bar!';
-		return $text;
+		return $context;
 	}
 
 	function add_to_twig( $twig ) {
@@ -57,6 +51,9 @@ class StarterSite extends TimberSite {
 		return $twig;
 	}
 
+	function enqueue_scripts() {
+		wp_enqueue_script( 'joist-index', get_template_directory_uri() . '/static/js/index.js', array( 'jquery' ) );
+	}
 }
 
 new StarterSite();
