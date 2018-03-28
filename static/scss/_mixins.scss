@@ -1,0 +1,246 @@
+// Mix color with black
+@function shade($color, $percent) {
+    @return mix(#000, $color, $percent);
+}
+
+// Mix color with white
+@function tint($color, $percent) {
+    @return mix(#fff, $color, $percent);
+}
+
+// Min-width media query for screens
+@mixin screen($min-width) {
+    @media only screen and (min-width: $min-width) {
+        @content;
+    }
+}
+
+// Absolutely position element in the center of its parent positioning context
+@mixin abs-center($position) {
+    position: absolute;
+
+    @if $position == 'vertical' {
+        top: 50%;
+        transform: translateY(-50%);
+    } @else if $position == 'horizontal' {
+        left: 50%;
+        transform: translateX(-50%);
+    } @else {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+// Fade an element in or out using transitions on visibility and opacity
+// See http://www.greywyvern.com/?post=337
+@mixin fade($type, $duration) {
+    @if $type == 'hide' {
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s linear $duration, opacity $duration;
+    } @else if $type == 'show' {
+        visibility: visible;
+        opacity: 1;
+        transition: visibility 0s linear 0s, opacity $duration;
+    }
+}
+
+//
+// The following code is copyright (c) HTML5 Boilerplate
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to
+// deal in the Software without restriction, including without limitation the
+// rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+// sell copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+// IN THE SOFTWARE.
+
+// Hide only visually, but have it available for screen readers:
+// https://snook.ca/archives/html_and_css/hiding-content-for-accessibility
+//
+// 1. For long content, line feeds are not interpreted as spaces and small
+//    width causes content to wrap 1 word per line:
+//    https://medium.com/@jessebeach/beware-smushed-off-screen-accessible-text-5952a4c2cbfe
+//
+@mixin hide-visually($focusable: false) {
+    border: 0;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+    white-space: nowrap; /* 1 */
+
+    @if $focusable {
+        // Extend to allow the element to be focusable when navigated to via
+        // the keyboard: https://www.drupal.org/node/897638
+        &:active,
+        &:focus {
+            clip: auto;
+            -webkit-clip-path: none;
+            clip-path: none;
+            height: auto;
+            margin: 0;
+            overflow: visible;
+            position: static;
+            width: auto;
+            white-space: inherit;
+        }
+    }
+}
+
+// Clearfix: contain floats
+// For modern browsers
+// 1. The space content is one way to avoid an Opera bug when the
+//    `contenteditable` attribute is included anywhere else in the document.
+//    Otherwise it causes space to appear at the top and bottom of elements
+//    that receive the `clearfix` class.
+// 2. The use of `table` rather than `block` is only necessary if using
+//    `:before` to contain the top-margins of child elements.
+//
+@mixin clearfix() {
+    &:before,
+    &:after {
+        content: " "; /* 1 */
+        display: table; /* 2 */
+    }
+
+    &:after {
+        clear: both;
+    }
+}
+
+
+//
+// The following code from Bourbon is copyright © 2011-2018 thoughtbot, inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the “Software”), to
+// deal in the Software without restriction, including without limitation the
+// rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+// sell copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+// IN THE SOFTWARE.
+
+
+// Hides the text in an element, commonly used to show an image instead. Some
+// elements will need block-level styles applied.
+@mixin hide-text {
+    overflow: hidden;
+    text-indent: 101%;
+    white-space: nowrap;
+}
+
+@function _assign-inputs($inputs, $pseudo) {
+    $list: ();
+
+    @each $input in $inputs {
+      $input: unquote($input);
+      $input: $input + ":" + $pseudo;
+      $list: append($list, $input, comma);
+    }
+
+    @return $list;
+}
+
+// Please note that you must interpolate the variable (#{}) to use it as a
+// selector.
+$all-text-inputs: (
+    "[type='color']",
+    "[type='date']",
+    "[type='datetime']",
+    "[type='datetime-local']",
+    "[type='email']",
+    "[type='month']",
+    "[type='number']",
+    "[type='password']",
+    "[type='search']",
+    "[type='tel']",
+    "[type='text']",
+    "[type='time']",
+    "[type='url']",
+    "[type='week']",
+    "input:not([type])",
+    "textarea",
+);
+$all-text-inputs-active: _assign-inputs($all-text-inputs, active);
+$all-text-inputs-focus: _assign-inputs($all-text-inputs, focus);
+$all-text-inputs-hover: _assign-inputs($all-text-inputs, hover);
+$all-text-inputs-invalid: _assign-inputs($all-text-inputs, invalid);
+
+$all-buttons: (
+    "button",
+    "[type='button']",
+    "[type='reset']",
+    "[type='submit']",
+);
+$all-buttons-active: _assign-inputs($all-buttons, active);
+$all-buttons-focus: _assign-inputs($all-buttons, focus);
+$all-buttons-hover: _assign-inputs($all-buttons, hover);
+$all-buttons-disabled: _assign-inputs($all-buttons, disabled);
+
+// Generates a triangle pointing in a specified direction.
+@mixin triangle($direction, $width, $height, $color) {
+    @if not index(
+        "up" "up-right" "right" "down-right" "down" "down-left" "left" "up-left",
+        $direction
+    ) {
+        @error "Direction must be `up`, `up-right`, `right`, `down-right`, " +
+            "`down`, `down-left`, `left` or `up-left`.";
+    } @else {
+        border-style: solid;
+        height: 0;
+        width: 0;
+
+        @if $direction == "up" {
+            border-color: transparent transparent $color;
+            border-width: 0 ($width / 2) $height;
+        } @else if $direction == "up-right" {
+            border-color: transparent $color transparent transparent;
+            border-width: 0 $width $width 0;
+        } @else if $direction == "right" {
+            border-color: transparent transparent transparent $color;
+            border-width: ($height / 2) 0 ($height / 2) $width;
+        } @else if $direction == "down-right" {
+            border-color: transparent transparent $color;
+            border-width: 0 0 $width $width;
+        } @else if $direction == "down" {
+            border-color: $color transparent transparent;
+            border-width: $height ($width / 2) 0;
+        } @else if $direction == "down-left" {
+            border-color: transparent transparent transparent $color;
+            border-width: $width 0 0 $width;
+        } @else if $direction == "left" {
+            border-color: transparent $color transparent transparent;
+            border-width: ($height / 2) $width ($height / 2) 0;
+        } @else if $direction == "up-left" {
+            border-color: $color transparent transparent;
+            border-width: $width $width 0 0;
+        }
+    }
+}
