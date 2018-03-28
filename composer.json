@@ -1,12 +1,12 @@
 {
-  "name": "upstatement/timber-starter-theme",
-  "description": "Starter theme to build a Timber theme",
-  "type":"wordpress-theme",
-  "minimum-stability" : "stable",
+  "name": "dvelyk/joist",
+  "description": "Joist is a WordPress starter theme built with Timber",
+  "type": "wordpress-theme",
+  "minimum-stability": "stable",
   "authors": [
       {
-          "name": "jarednova",
-          "email": "jared@upstatement.com"
+          "name": "Kyle Robertson",
+          "email": "kyle@typefirst.ca"
       }
   ],
   "repositories": [
@@ -15,15 +15,19 @@
       "url": "https://wpackagist.org"
     }
   ],
-  "extra": {
-  	"installer-paths": {
-      "../../plugins/{$name}/": [
-        "wpackagist-plugin/*",
-        "type:wordpress-plugin"
-      ]
-  	}
-	},
+  "extra" : {
+    "installer-paths" : {
+      "../../plugins/{$name}/" : ["type:wordpress-plugin"]
+    }
+  },
   "require": {
-	  "wpackagist-plugin/timber-library": "0.22.*"
+    "wpackagist-plugin/safe-svg": "1.6.*",
+	  "timber/timber": "1.7.0",
+    "mindkomm/timmy": "^0.13.5"
+  },
+  "require-dev": {
+    "dealerdirect/phpcodesniffer-composer-installer": "0.4.*",
+    "wp-coding-standards/wpcs": "0.14.*",
+    "hellonico/timber-dump-extension": "^0.1.1"
   }
 }
