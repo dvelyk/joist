@@ -1,67 +1,70 @@
 <?php
 
-$autoload_dir = __DIR__ . '/vendor/autoload.php';
-if ( ! is_readable( $autoload_dir ) ) {
-	wp_die( __( 'Please run <code>composer install</code> to download and install the theme dependencies.', 'joist' ) );
-}
-require_once( $autoload_dir );
+/**
+ * Additional functionality should be added to files in the include/* folder.
+ *
+ * See include/class-joistsite.php for more information.
+ *
+ */
 
-$timber = new \Timber\Timber();
+if ( ! function_exists( 'is_login_page' ) ) {
+	function is_login_page() {
+		$abspath = str_replace(
+			array( '\\', '/' ),
+			DIRECTORY_SEPARATOR,
+			ABSPATH
+		);
 
-if ( ! class_exists( 'Timber' ) ) {
-	add_action( 'admin_notices', function() {
-		echo '<div class="error"><p>Timber not activated. Make sure you activate the plugin in <a href="' . esc_url( admin_url( 'plugins.php#timber' ) ) . '">' . esc_url( admin_url( 'plugins.php') ) . '</a></p></div>';
-	});
-
-	add_filter('template_include', function( $template ) {
-		return get_stylesheet_directory() . '/static/no-timber.html';
-	});
-
-	return;
-}
-
-Timber::$dirname = array( 'templates', 'views' );
-
-class StarterSite extends TimberSite {
-
-	function __construct() {
-		add_theme_support( 'post-formats' );
-		add_theme_support( 'post-thumbnails' );
-		add_theme_support( 'menus' );
-		add_theme_support( 'html5', array( 'comment-list', 'comment-form', 'search-form', 'gallery', 'caption' ) );
-		add_filter( 'timber_context', array( $this, 'add_to_context' ) );
-		add_filter( 'get_twig', array( $this, 'add_to_twig' ) );
-		add_action( 'init', array( $this, 'register_post_types' ) );
-		add_action( 'init', array( $this, 'register_taxonomies' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-
-		parent::__construct();
-	}
-
-	function register_post_types() {
-		// This is where you can register custom post types
-	}
-
-	function register_taxonomies() {
-		// This is where you can register custom taxonomies
-	}
-
-	function add_to_context( $context ) {
-		// These values are available everytime you call Timber::get_context();
-
-		return $context;
-	}
-
-	function add_to_twig( $twig ) {
-		/* this is where you can add your own functions to twig */
-		$twig->addExtension( new Twig_Extension_StringLoader() );
-		$twig->addFilter('myfoo', new Twig_SimpleFilter('myfoo', array($this, 'myfoo')));
-		return $twig;
-	}
-
-	function enqueue_scripts() {
-		wp_enqueue_script( 'joist-index', get_template_directory_uri() . '/static/js/index.js', array( 'jquery' ) );
+		return (
+			'wp-login.php' === $GLOBALS['pagenow'] ||
+			'/wp-login.php' === $_SERVER['PHP_SELF'] ||  // phpcs:ignore
+			in_array( $abspath . 'wp-login.php', get_included_files(), true )
+		);
 	}
 }
 
-new StarterSite();
+add_action( 'after_setup_theme', 'joist_load' );
+function joist_load() {
+	// Ensure Composer installed dependencies
+	$autoload_dir = __DIR__ . '/vendor/autoload.php';
+
+	if ( ! is_readable( $autoload_dir ) ) {
+		$error = __( '<div class="error">Please run <code>composer install</code> to download and install the theme dependencies.</div>', 'joist' );
+		if ( is_admin() || is_login_page() ) {
+			add_action( 'admin_notices', function() use ( $error ) {
+				echo $error;  // phpcs:ignore
+			});
+
+			return;
+		}
+
+		wp_die( $error );  // phpcs:ignore
+	}
+	require_once( $autoload_dir );
+
+	// Setup class autoloader for this theme
+	require_once(
+		__DIR__ . DIRECTORY_SEPARATOR
+		. implode( DIRECTORY_SEPARATOR, array( 'lib', 'class-joistautoload.php' ) )
+	);
+
+	// Configure Timber
+	$timber = new \Timber\Timber();
+
+	if ( ! class_exists( 'Timber' ) ) {
+		add_action( 'admin_notices', function() {
+			echo '<div class="error"><p>Timber not activated. Make sure you activate the plugin in <a href="' . esc_url( admin_url( 'plugins.php#timber' ) ) . '">' . esc_url( admin_url( 'plugins.php' ) ) . '</a></p></div>';
+		});
+
+		add_filter('template_include', function( $template ) {
+			return get_stylesheet_directory() . '/static/no-timber.html';
+		});
+
+		return;
+	}
+
+	Timber::$dirname = array( 'templates', 'views' );
+
+	// Continue configuring the theme
+	new JoistSite();
+}
