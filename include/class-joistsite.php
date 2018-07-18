@@ -26,11 +26,12 @@ class JoistSite extends TimberSite {
 		add_filter( 'timber_context', array( $this, 'add_to_context' ) );
 		add_filter( 'timber/context', array( $this, 'add_widgets_to_context' ) );
 
-		add_action( 'init', array( $this, 'register_post_types' ) );
+		add_action( 'carbon_fields_register_fields', array( $this, 'register_post_types' ) );
 		add_action( 'init', array( $this, 'register_shortcodes' ) );
 		add_action( 'init', array( $this, 'register_taxonomies' ) );
 		add_action( 'widgets_init', array( $this, 'register_widgets' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		add_filter( 'body_class', array( $this, 'add_slug_to_body_class' ) );
 
 		// Configure Carbon Fields
 		\Carbon_Fields\Carbon_Fields::boot();
@@ -41,8 +42,46 @@ class JoistSite extends TimberSite {
 		set_post_thumbnail_size( 0, 0 );
 		new Timmy\Timmy();
 		add_filter( 'timmy/sizes', array( $this, 'register_image_sizes' ) );
+		require_once __DIR__ . '/../lib/admin-thumbnail-crop-settings.php';
+
+
+		// Configure WooCommerce
+		/*
+		add_theme_support( 'woocommerce' );
+		Timber\Integrations\WooCommerce\WooCommerce::init();
+
+		add_filter( 'wp_setup_nav_menu_item', array( $this, 'add_cart_contents_to_menu' ) );
+		*/
+
+		// Hide Jetpack upsells
+		add_filter( 'jetpack_just_in_time_msgs', '__return_false' );
+
+		// Add custom roles and capabilities
+		$this->register_user_roles();
 
 		parent::__construct();
+	}
+
+	/*
+	function add_cart_contents_to_menu( $item ) {
+		$cart = WC()->cart;
+
+		if ( 'Cart' === $item->title && $cart ) {
+			$item->title = 'Cart (' . $cart->get_cart_contents_count() . ')';
+		}
+
+		return $item;
+	}
+	*/
+
+	function add_slug_to_body_class( $classes ) {
+		global $post;
+
+		if ( isset( $post ) ) {
+			$classes[] = $post->post_type . '-' . $post->post_name;
+		}
+
+		return $classes;
 	}
 
 	function add_to_context( $context ) {
@@ -56,6 +95,11 @@ class JoistSite extends TimberSite {
 				'email'        => carbon_get_theme_option( 'crb_email' ),
 				'phone_number' => carbon_get_theme_option( 'crb_phone_number' ),
 				'logo'         => carbon_get_theme_option( 'crb_logo' ),
+				'social_media' => array(
+					'facebook'  => carbon_get_theme_option( 'crb_facebook' ),
+					'instagram' => carbon_get_theme_option( 'crb_instagram' ),
+					'twitter'   => carbon_get_theme_option( 'crb_twitter' ),
+				),
 				*/
 			),
 		) );
@@ -79,7 +123,7 @@ class JoistSite extends TimberSite {
 	}
 
 	function enqueue_scripts() {
-		wp_enqueue_script( 'joist', get_template_directory_uri() . '/static/js/index.js', array( 'jquery' ) );
+		wp_enqueue_script( 'joist', get_template_directory_uri() . '/static/js/index.js', array( 'jquery' ), 'version', true );
 	}
 
 	function register_fields() {
@@ -95,11 +139,6 @@ class JoistSite extends TimberSite {
 				'name'       => 'Thumbnail',
 				'post_types' => array( 'all' ),
 			),
-			'featured'  => array(
-				'resize' => array( 1600 ),
-				'srcset' => array( 0.25, 0.5, 1, 1.25, 1.5, 2 ),
-				'name'   => 'Featured (Hero)',
-			),
 		);
 	}
 
@@ -113,6 +152,9 @@ class JoistSite extends TimberSite {
 
 	function register_taxonomies() {
 		include_once( __DIR__ . '/taxonomies.php' );
+	}
+
+	function register_user_roles() {
 	}
 
 	function register_widgets() {
