@@ -15,7 +15,7 @@ const STYLE_CSS_BANNER = `/*
  * Author: <%= author %>
  * Version: <%= version %>
  * License: <%= license %>
- * Text Domain: <% print(name.toLowerCase()) %>
+ * Text Domain: joist
 */`;
 
 const convertScssToCSS = ({ debug = false }) => {
