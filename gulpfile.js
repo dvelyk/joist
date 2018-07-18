@@ -40,6 +40,10 @@ gulp.task('build', () => {
     convertScssToCSS({ debug: false });
 });
 
+gulp.task('watch', () => {
+    gulp.watch(SCSS_INPUT, ['css']);
+});
+
 gulp.task('default', ['css'], () => {
     gulp.watch(SCSS_INPUT, ['css']);
 });
