@@ -10,4 +10,6 @@ $templates = array(
 	'sidebar.twig',
 );
 
-Timber::render( $templates, $data );
+$context = Timber::get_context();
+
+Timber::render( $templates, $context );
