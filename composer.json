@@ -21,10 +21,10 @@
     }
   },
   "require": {
-    "wpackagist-plugin/safe-svg": "1.6.*",
-	  "timber/timber": "1.7.0",
-    "mindkomm/timmy": "^0.13.5",
-    "htmlburger/carbon-fields": "^2.2"
+    "wpackagist-plugin/safe-svg": "1.9.*",
+	  "timber/timber": "1.8.4",
+    "mindkomm/timmy": "^0.14.0",
+    "htmlburger/carbon-fields": "^3.0.2"
   },
   "require-dev": {
     "dealerdirect/phpcodesniffer-composer-installer": "0.4.*",
