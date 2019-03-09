@@ -10,15 +10,15 @@ use Carbon_Fields\Field;
 
 /*
 Container::make( 'theme_options', __( 'Theme Options', 'joist' ) )
-	->add_tab( __( 'Header', 'vital' ), array(
+	->add_tab( __( 'Header', 'vital' ), [
 		Field::make( 'image', 'crb_logo' ),
-	) )
-	->add_tab( __( 'Contact', 'vital' ), array(
+	] )
+	->add_tab( __( 'Contact', 'vital' ), [
 		Field::make( 'text', 'crb_company_name' ),
 		Field::make( 'text', 'crb_phone_number' ),
 		Field::make( 'text', 'crb_email' ),
-	) )
-	->add_tab( __( 'Social Media' ), array(
+	] )
+	->add_tab( __( 'Social Media' ), [
 		Field::make( 'text', 'crb_facebook_url', __( 'Facebook URL', 'vital' ) ),
-	) );
+	] );
 */

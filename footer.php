@@ -10,9 +10,9 @@
  *
  */
 
-$templates = array(
+$templates = [
 	'page-plugin.twig',
-);
+];
 
 $timber_context = $GLOBALS['timber_context'];
 

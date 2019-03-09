@@ -9,9 +9,9 @@ class JoistExampleWidget extends Widget {
 			'joist_example_widget',
 			'Example',
 			'This is an example widget.',
-			array(
+			[
 				Field::make( 'text', 'description', __( 'Description', 'joist' ) ),
-			)
+			]
 		);
 	}
 

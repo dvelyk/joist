@@ -2,11 +2,11 @@
 
 if ( ! class_exists( 'JoistAutoload' ) ) {
 	class JoistAutoload {
-		private static $dirs = array(
-			array( __DIR__, '..', 'include' ),
-			array( __DIR__, '..', 'include', 'widgets' ),
-			array( __DIR__ ),
-		);
+		private static $dirs = [
+			[ __DIR__, '..', 'include' ],
+			[ __DIR__, '..', 'include', 'widgets' ],
+			[ __DIR__ ],
+		];
 
 		public static function init() {
 			foreach ( self::$dirs as $key => $array ) {

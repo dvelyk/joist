@@ -21,10 +21,10 @@
  * @since    Timber 0.1
  */
 
-$templates = array(
+$templates = [
 	'page-' . $post->post_name . '.twig',
 	'page.twig',
-);
+];
 
 $post    = new TimberPost();
 $context = Timber::get_context();

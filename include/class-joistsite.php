@@ -9,9 +9,9 @@ class JoistSite extends TimberSite {
 		add_theme_support( 'post-formats' );
 		add_theme_support( 'post-thumbnails' );
 		add_theme_support( 'menus' );
-		add_theme_support( 'html5', array( 'comment-list', 'comment-form', 'search-form', 'gallery', 'caption' ) );
+		add_theme_support( 'html5', [ 'comment-list', 'comment-form', 'search-form', 'gallery', 'caption' ] );
 
-		add_filter( 'get_twig', array( $this, 'add_to_twig' ) );
+		add_filter( 'get_twig', [ $this, 'add_to_twig' ] );
 
 		/**
 		 * TODO: This is kind of a hack. We can't render widgets that use
@@ -23,25 +23,25 @@ class JoistSite extends TimberSite {
 		 * widgets using the slash filter after the variables are added to the
 		 * context with the underscore filter.
 		 */
-		add_filter( 'timber_context', array( $this, 'add_to_context' ) );
-		add_filter( 'timber/context', array( $this, 'add_widgets_to_context' ) );
+		add_filter( 'timber_context', [ $this, 'add_to_context' ] );
+		add_filter( 'timber/context', [ $this, 'add_widgets_to_context' ] );
 
-		add_action( 'carbon_fields_register_fields', array( $this, 'register_post_types' ) );
-		add_action( 'init', array( $this, 'register_shortcodes' ) );
-		add_action( 'init', array( $this, 'register_taxonomies' ) );
-		add_action( 'widgets_init', array( $this, 'register_widgets' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-		add_filter( 'body_class', array( $this, 'add_slug_to_body_class' ) );
+		add_action( 'carbon_fields_register_fields', [ $this, 'register_post_types' ] );
+		add_action( 'init', [ $this, 'register_shortcodes' ] );
+		add_action( 'init', [ $this, 'register_taxonomies' ] );
+		add_action( 'widgets_init', [ $this, 'register_widgets' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
+		add_filter( 'body_class', [ $this, 'add_slug_to_body_class' ] );
 
 		// Configure Carbon Fields
 		\Carbon_Fields\Carbon_Fields::boot();
 		new Timber\Integrations\CarbonFields();
-		add_action( 'carbon_fields_register_fields', array( $this, 'register_fields' ) );
+		add_action( 'carbon_fields_register_fields', [ $this, 'register_fields' ] );
 
 		// Configure Timmy
 		set_post_thumbnail_size( 0, 0 );
 		new Timmy\Timmy();
-		add_filter( 'timmy/sizes', array( $this, 'register_image_sizes' ) );
+		add_filter( 'timmy/sizes', [ $this, 'register_image_sizes' ] );
 		require_once __DIR__ . '/../lib/admin-thumbnail-crop-settings.php';
 
 
@@ -50,7 +50,7 @@ class JoistSite extends TimberSite {
 		add_theme_support( 'woocommerce' );
 		Timber\Integrations\WooCommerce\WooCommerce::init();
 
-		add_filter( 'wp_setup_nav_menu_item', array( $this, 'add_cart_contents_to_menu' ) );
+		add_filter( 'wp_setup_nav_menu_item', [ $this, 'add_cart_contents_to_menu' ] );
 		*/
 
 		// Hide Jetpack upsells
@@ -87,22 +87,22 @@ class JoistSite extends TimberSite {
 	function add_to_context( $context ) {
 		// These values are available on every Timber::get_context() call
 
-		return array_merge( $context, array(
+		return array_merge( $context, [
 			'menu'    => new Timber\Menu( 'main-menu' ),
-			'options' => array(
+			'options' => [
 				/*
 				'company_name' => carbon_get_theme_option( 'crb_company_name' ),
 				'email'        => carbon_get_theme_option( 'crb_email' ),
 				'phone_number' => carbon_get_theme_option( 'crb_phone_number' ),
 				'logo'         => carbon_get_theme_option( 'crb_logo' ),
-				'social_media' => array(
+				'social_media' => [
 					'facebook'  => carbon_get_theme_option( 'crb_facebook' ),
 					'instagram' => carbon_get_theme_option( 'crb_instagram' ),
 					'twitter'   => carbon_get_theme_option( 'crb_twitter' ),
-				),
+				],
 				*/
-			),
-		) );
+			],
+		] );
 	}
 
 	function add_to_twig( $twig ) {
@@ -116,14 +116,14 @@ class JoistSite extends TimberSite {
 	function add_widgets_to_context( $context ) {
 		// Add widget areas to the default Twig context
 
-		return array_merge( $context, array(
+		return array_merge( $context, [
 			'example' => Timber::get_widgets( 'joist_example' ),
 			// 'footer'  => Timber::get_widgets( 'footer' ),
-		) );
+		] );
 	}
 
 	function enqueue_scripts() {
-		wp_enqueue_script( 'joist', get_template_directory_uri() . '/static/js/index.js', array( 'jquery' ), 'version', true );
+		wp_enqueue_script( 'joist', get_template_directory_uri() . '/static/js/index.js', [ 'jquery' ], 'version', true );
 	}
 
 	function register_fields() {
@@ -133,13 +133,13 @@ class JoistSite extends TimberSite {
 
 	function register_image_sizes( $sizes ) {
 		// TODO: Customize for your site
-		return array(
-			'thumbnail' => array(
-				'resize'     => array( 150, 150, 'center' ),
+		return [
+			'thumbnail' => [
+				'resize'     => [ 150, 150, 'center' ],
 				'name'       => 'Thumbnail',
-				'post_types' => array( 'all' ),
-			),
-		);
+				'post_types' => [ 'all' ],
+			],
+		];
 	}
 
 	function register_post_types() {

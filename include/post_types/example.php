@@ -5,8 +5,8 @@
  *
  */
 
-register_post_type( 'joist_example', array(
-	'labels'          => array(
+register_post_type( 'joist_example', [
+	'labels'          => [
 		'name'               => __( 'Examples', 'joist' ),
 		'singular_name'      => __( 'Example', 'joist' ),
 		'add_new_item'       => __( 'Add example', 'joist' ),
@@ -16,17 +16,17 @@ register_post_type( 'joist_example', array(
 		'search_items'       => __( 'Search examples', 'joist' ),
 		'not_found'          => __( 'No examples found.', 'joist' ),
 		'not_found_in_trash' => __( 'No examples found in trash.', 'joist' ),
-	),
+	],
 	'public'          => true,
 	'show_ui'         => true,
 	'capability_type' => 'post',
 	'menu_icon'       => 'dashicons-media-text',
-	'rewrite'         => array(
+	'rewrite'         => [
 		'slug' => 'examples',
-	),
-	'supports'        => array(
+	],
+	'supports'        => [
 		'title',
 		'editor',
 		'thumbnail',
-	),
-) );
+	],
+] );

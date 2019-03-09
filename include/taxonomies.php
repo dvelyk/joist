@@ -12,7 +12,7 @@
 	// create two taxonomies, genres and writers for the post type "book"
 
 	// Add new taxonomy, make it hierarchical (like categories)
-	$labels = array(
+	$labels = [
 		'name'              => _x( 'Genres', 'taxonomy general name', 'textdomain' ),
 		'singular_name'     => _x( 'Genre', 'taxonomy singular name', 'textdomain' ),
 		'search_items'      => __( 'Search Genres', 'textdomain' ),
@@ -24,21 +24,21 @@
 		'add_new_item'      => __( 'Add New Genre', 'textdomain' ),
 		'new_item_name'     => __( 'New Genre Name', 'textdomain' ),
 		'menu_name'         => __( 'Genre', 'textdomain' ),
-	);
+	];
 
-	$args = array(
+	$args = [
 		'hierarchical'      => true,
 		'labels'            => $labels,
 		'show_ui'           => true,
 		'show_admin_column' => true,
 		'query_var'         => true,
-		'rewrite'           => array( 'slug' => 'genre' ),
-	);
+		'rewrite'           => [ 'slug' => 'genre' ],
+	];
 
-	register_taxonomy( 'joist_genre', array( 'joist_book' ), $args );
+	register_taxonomy( 'joist_genre', [ 'joist_book' ], $args );
 
 	// Add new taxonomy, NOT hierarchical (like tags)
-	$labels = array(
+	$labels = [
 		'name'                       => _x( 'Writers', 'taxonomy general name', 'textdomain' ),
 		'singular_name'              => _x( 'Writer', 'taxonomy singular name', 'textdomain' ),
 		'search_items'               => __( 'Search Writers', 'textdomain' ),
@@ -55,17 +55,17 @@
 		'choose_from_most_used'      => __( 'Choose from the most used writers', 'textdomain' ),
 		'not_found'                  => __( 'No writers found.', 'textdomain' ),
 		'menu_name'                  => __( 'Writers', 'textdomain' ),
-	);
+	];
 
-	$args = array(
+	$args = [
 		'hierarchical'          => false,
 		'labels'                => $labels,
 		'show_ui'               => true,
 		'show_admin_column'     => true,
 		'update_count_callback' => '_update_post_term_count',
 		'query_var'             => true,
-		'rewrite'               => array( 'slug' => 'writer' ),
-	);
+		'rewrite'               => [ 'slug' => 'writer' ],
+	];
 
 	register_taxonomy( 'joist_writer', 'joist_book', $args );
 

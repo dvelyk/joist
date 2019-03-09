@@ -6,9 +6,9 @@
  * @subpackage  Timber
  */
 
-$templates = array(
+$templates = [
 	'sidebar.twig',
-);
+];
 
 $context = Timber::get_context();
 

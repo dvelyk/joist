@@ -10,7 +10,7 @@
 if ( ! function_exists( 'is_login_page' ) ) {
 	function is_login_page() {
 		$abspath = str_replace(
-			array( '\\', '/' ),
+			[ '\\', '/' ],
 			DIRECTORY_SEPARATOR,
 			ABSPATH
 		);
@@ -45,7 +45,7 @@ function joist_load() {
 	// Setup class autoloader for this theme
 	require_once(
 		__DIR__ . DIRECTORY_SEPARATOR
-		. implode( DIRECTORY_SEPARATOR, array( 'lib', 'class-joistautoload.php' ) )
+		. implode( DIRECTORY_SEPARATOR, [ 'lib', 'class-joistautoload.php' ] )
 	);
 
 	// Configure Timber
@@ -63,7 +63,7 @@ function joist_load() {
 		return;
 	}
 
-	Timber::$dirname = array( 'templates', 'views' );
+	Timber::$dirname = [ 'templates', 'views' ];
 
 	// Continue configuring the theme
 	new JoistSite();

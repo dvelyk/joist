@@ -11,10 +11,10 @@
 
 	// [joist_bartag foo="foo-value"]
 	function joist_bartag_func( $atts ) {
-		$a = shortcode_atts( array(
+		$a = shortcode_atts( [
 			'foo' => 'something',
 			'bar' => 'something else',
-		), $atts );
+		], $atts );
 
 		return "foo = {$a['foo']}";
 	}

@@ -22,26 +22,26 @@ class WidontTwigExtension extends \Twig_Extension {
 	 * @return array
 	 */
 	public function getFilters() {
-		return array(
+		return [
 			new \Twig_SimpleFilter(
 				'widont',
-				array( $this, 'widont' ),
-				array( 'is_safe' => array( 'html' ) )
+				[ $this, 'widont' ],
+				[ 'is_safe' => [ 'html' ] ]
 			),
-		);
+		];
 	}
 
 	/**
 	* @return array
 	 */
 	public function getFunctions() {
-		return array(
+		return [
 			new \Twig_SimpleFunction(
 				'widont',
-				array( $this, 'widont' ),
-				array( 'is_safe' => array( 'html' ) )
+				[ $this, 'widont' ],
+				[ 'is_safe' => [ 'html' ] ]
 			),
-		);
+		];
 	}
 
 	/**

@@ -13,9 +13,9 @@
  * @since   Timber 0.1
  */
 
-$templates = array(
+$templates = [
 	'index.twig',
-);
+];
 
 if ( is_home() ) {
 	array_unshift( $templates, 'home.twig' );

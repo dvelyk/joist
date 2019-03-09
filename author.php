@@ -11,10 +11,10 @@
 
 global $wp_query;
 
-$templates = array(
+$templates = [
 	'author.twig',
 	'archive.twig',
-);
+];
 
 $context = Timber::get_context();
 

@@ -17,10 +17,10 @@ $context['post'] = $post;
 if ( post_password_required( $post->ID ) ) {
 	Timber::render( 'single-password.twig', $context );
 } else {
-	$templates = array(
+	$templates = [
 		'single-' . $post->ID . '.twig',
 		'single-' . $post->post_type . '.twig',
 		'single.twig',
-	);
+	];
 	Timber::render( $templates, $context );
 }

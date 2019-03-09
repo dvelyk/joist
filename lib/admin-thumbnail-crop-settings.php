@@ -7,7 +7,7 @@
 
 define( 'JOIST_THUMBNAIL_CROP_FIELD', 'crb_thumbnail_crop' );
 define( 'JOIST_CROP_SETTING_INPUT_NAME', 'joist_thumbnail_crop_setting' );
-define( 'JOIST_CROP_SETTINGS', array(
+define( 'JOIST_CROP_SETTINGS', [
 	// As defined in timber/lib/Image/Operation/Resize.php
 	'default'       => __( 'Default', 'joist' ),
 	'left'          => __( 'Left', 'joist' ),
@@ -17,14 +17,14 @@ define( 'JOIST_CROP_SETTINGS', array(
 	'top-center'    => __( 'Top Center', 'joist' ),
 	'bottom'        => __( 'Bottom', 'joist' ),
 	'bottom-center' => __( 'Bottom Center', 'joist' ),
-) );
+] );
 
 
 add_filter( 'admin_post_thumbnail_html', 'joist_thumbnail_crop_settings', 10, 2 );
 function joist_thumbnail_crop_settings( $html, $post_id ) {
 	$selected_option = get_post_meta( $post_id, JOIST_THUMBNAIL_CROP_FIELD, true );
 
-	$options = array();
+	$options = [];
 	foreach ( JOIST_CROP_SETTINGS as $crop => $label ) {
 		$options[] = '<option value="' . $crop . '" ' . selected( $selected_option, $crop, false ) . '>' . $label . '</option>';
 	}
