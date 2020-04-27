@@ -56,6 +56,8 @@ class JoistSite extends TimberSite {
 		// Hide Jetpack upsells
 		add_filter( 'jetpack_just_in_time_msgs', '__return_false' );
 
+		add_filter( 'tiny_mce_before_init', [ $this, 'config_tiny_mce' ] );
+
 		// Add custom roles and capabilities
 		$this->register_user_roles();
 
@@ -120,6 +122,19 @@ class JoistSite extends TimberSite {
 			'example' => Timber::get_widgets( 'joist_example' ),
 			// 'footer'  => Timber::get_widgets( 'footer' ),
 		] );
+	}
+
+	/**
+	 * Remove the h1 tag from the WordPress editor.
+	 * From https://gist.github.com/kjbrum/da4eb508be09b9c336a9
+	 *
+	 * @param  array $settings   The array of editor settings.
+	 * @return array             The modified edit settings
+	 */
+	private function config_tiny_mce( $settings ) {
+		$settings['block_formats'] = 'Paragraph=p;Heading 2=h2;Heading 3=h3;Heading 4=h4;Heading 5=h5;Heading 6=h6;Preformatted=pre;';
+
+		return $settings;
 	}
 
 	function enqueue_scripts() {
