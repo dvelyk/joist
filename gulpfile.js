@@ -1,9 +1,7 @@
 const gulp = require('gulp');
 const autoprefixer = require('gulp-autoprefixer');
-const gulpif = require('gulp-if');
 const header = require('gulp-header');
 const sass = require('gulp-sass');
-const sourcemaps = require('gulp-sourcemaps');
 const pkg = require('./package.json');
 
 const SCSS_INPUT = 'static/scss/**/*.scss';
@@ -18,32 +16,29 @@ const STYLE_CSS_BANNER = `/*
  * Text Domain: joist
 */`;
 
-const convertScssToCSS = ({ debug = false }) => {
-    gulp.src(SCSS_INPUT)
-        .pipe(gulpif(debug, header(STYLE_CSS_BANNER, pkg)))
-        .pipe(gulpif(debug, sourcemaps.init()))
+function cssDebug() {
+    return gulp.src(SCSS_INPUT, { sourcemaps: true })
+        .pipe(header(STYLE_CSS_BANNER, pkg))
         .pipe(sass({
             errLogToConsole: true,
-            outputStyle: debug ? 'expanded' : 'compressed',
+            outputStyle: 'expanded',
         }).on('error', sass.logError))
         .pipe(autoprefixer())
-        .pipe(gulpif(debug, sourcemaps.write('static/')))
-        .pipe(gulpif(!debug, header(STYLE_CSS_BANNER, pkg)))
-        .pipe(gulp.dest('.'));
+        .pipe(gulp.dest('.', { sourcemaps: true }));
 }
 
-gulp.task('css', () => {
-    convertScssToCSS({ debug: true });
-});
+function cssProd() {
+    return gulp.src(SCSS_INPUT, { sourcemaps: true })
+        .pipe(sass({
+            errLogToConsole: true,
+            outputStyle: 'compressed',
+        }).on('error', sass.logError))
+        .pipe(autoprefixer())
+        .pipe(gulp.dest('.', { sourcemaps: '.' }));
+}
 
-gulp.task('build', () => {
-    convertScssToCSS({ debug: false });
-});
-
-gulp.task('watch', () => {
-    gulp.watch(SCSS_INPUT, ['css']);
-});
-
-gulp.task('default', ['css'], () => {
-    gulp.watch(SCSS_INPUT, ['css']);
-});
+exports.css = gulp.parallel(cssDebug);
+exports.build = gulp.parallel(cssProd);
+exports.default = exports.watch = function() {
+    gulp.watch(SCSS_INPUT, cssDebug);
+}
