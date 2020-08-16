@@ -30,6 +30,7 @@
     "dealerdirect/phpcodesniffer-composer-installer": "0.7.*",
     "wp-coding-standards/wpcs": "2.3.*",
     "hellonico/timber-dump-extension": "1.0.*",
-    "squizlabs/php_codesniffer": "3.5.*"
+    "squizlabs/php_codesniffer": "3.5.*",
+    "php-stubs/wordpress-stubs": "^5.4"
   }
 }
