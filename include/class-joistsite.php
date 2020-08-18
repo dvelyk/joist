@@ -3,7 +3,7 @@
 class JoistSite extends TimberSite {
 	private $front_page_id;
 
-	function __construct() {
+	public function __construct() {
 		$this->front_page_id = (int) get_option( 'page_on_front' );
 
 		add_theme_support( 'post-formats' );
@@ -65,7 +65,7 @@ class JoistSite extends TimberSite {
 	}
 
 	/*
-	function add_cart_contents_to_menu( $item ) {
+	public function add_cart_contents_to_menu( $item ) {
 		$cart = WC()->cart;
 
 		if ( 'Cart' === $item->title && $cart ) {
@@ -76,7 +76,7 @@ class JoistSite extends TimberSite {
 	}
 	*/
 
-	function add_slug_to_body_class( $classes ) {
+	public function add_slug_to_body_class( $classes ) {
 		global $post;
 
 		if ( isset( $post ) ) {
@@ -86,7 +86,7 @@ class JoistSite extends TimberSite {
 		return $classes;
 	}
 
-	function add_to_context( $context ) {
+	public function add_to_context( $context ) {
 		// These values are available on every Timber::get_context() call
 
 		return array_merge( $context, [
@@ -107,7 +107,7 @@ class JoistSite extends TimberSite {
 		] );
 	}
 
-	function add_to_twig( $twig ) {
+	public function add_to_twig( $twig ) {
 		// Add custom functions to Twig
 
 		$twig->addExtension( new WidontTwigExtension() );
@@ -115,7 +115,7 @@ class JoistSite extends TimberSite {
 		return $twig;
 	}
 
-	function add_widgets_to_context( $context ) {
+	public function add_widgets_to_context( $context ) {
 		// Add widget areas to the default Twig context
 
 		return array_merge( $context, [
@@ -131,22 +131,22 @@ class JoistSite extends TimberSite {
 	 * @param  array $settings   The array of editor settings.
 	 * @return array             The modified edit settings
 	 */
-	private function config_tiny_mce( $settings ) {
+	public function config_tiny_mce( $settings ) {
 		$settings['block_formats'] = 'Paragraph=p;Heading 2=h2;Heading 3=h3;Heading 4=h4;Heading 5=h5;Heading 6=h6;Preformatted=pre;';
 
 		return $settings;
 	}
 
-	function enqueue_scripts() {
+	public function enqueue_scripts() {
 		wp_enqueue_script( 'joist', get_template_directory_uri() . '/static/js/index.js', [ 'jquery' ], 'version', true );
 	}
 
-	function register_fields() {
+	public function register_fields() {
 		include_once( __DIR__ . '/post-meta.php' );
 		include_once( __DIR__ . '/theme-options.php' );
 	}
 
-	function register_image_sizes( $sizes ) {
+	public function register_image_sizes( $sizes ) {
 		// TODO: Customize for your site
 		return [
 			'thumbnail' => [
@@ -157,22 +157,22 @@ class JoistSite extends TimberSite {
 		];
 	}
 
-	function register_post_types() {
+	public function register_post_types() {
 		include_once( __DIR__ . '/post-types.php' );
 	}
 
-	function register_shortcodes() {
+	public function register_shortcodes() {
 		include_once( __DIR__ . '/shortcodes.php' );
 	}
 
-	function register_taxonomies() {
+	public function register_taxonomies() {
 		include_once( __DIR__ . '/taxonomies.php' );
 	}
 
-	function register_user_roles() {
+	public function register_user_roles() {
 	}
 
-	function register_widgets() {
+	public function register_widgets() {
 		include_once( __DIR__ . '/widget-areas.php' );
 
 		include_once( __DIR__ . '/widgets/register.php' );
