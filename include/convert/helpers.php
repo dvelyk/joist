@@ -103,19 +103,34 @@ function joist_delete_postmeta( $post_type, $meta_keys ) {
 		array_fill( 0, count( $meta_keys ), '%s' )
 	);
 
-	// Assemble the SQL query to prepare.
-	$sql = <<<SQL
-		DELETE meta FROM $wpdb->postmeta AS meta
-		INNER JOIN $wpdb->posts AS posts ON posts.ID = meta.post_id
-		WHERE posts.post_type = %s AND meta.meta_key IN ($placeholders)
+	if ( '*' === $post_type ) {
+		// Delete matching meta_keys for all post types.
+
+		// Assemble the SQL query to prepare.
+		$sql = <<<SQL
+			DELETE FROM $wpdb->postmeta
+			WHERE meta.meta_key IN ($placeholders)
+SQL;
+		// Prepare the query.
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$query = $wpdb->prepare( $sql, $meta_keys );
+	} else {
+		// Delete matching meta_keys for one post type only.
+
+		// Assemble the SQL query to prepare.
+		$sql = <<<SQL
+			DELETE meta FROM $wpdb->postmeta AS meta
+			INNER JOIN $wpdb->posts AS posts ON posts.ID = meta.post_id
+			WHERE posts.post_type = %s AND meta.meta_key IN ($placeholders)
 SQL;
 
-	// Prepare the query.
-	$query = $wpdb->prepare(
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		$sql,
-		array_merge( [ $post_type ], $meta_keys )
-	);
+		// Prepare the query.
+		$query = $wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$sql,
+			array_merge( [ $post_type ], $meta_keys )
+		);
+	}
 
 	// Execute.
 	// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
