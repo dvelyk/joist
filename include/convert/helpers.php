@@ -8,8 +8,8 @@
 /**
  * Inserts terms into a given taxonomy if they don't already exist.
  *
- * @param [string] $taxonomy Name of the taxonomy.
- * @param [array]  $terms Associative array of unique term slugs and names.
+ * @param string $taxonomy Name of the taxonomy.
+ * @param array  $terms Associative array of unique term slugs and names.
  * @return void
  */
 function joist_insert_unique_terms( $taxonomy, $terms ) {
@@ -41,9 +41,9 @@ function joist_insert_unique_terms( $taxonomy, $terms ) {
 /**
  * Converts one post_type to another by updating the database directly.
  *
- * @param [string] $old_post_type The old post type.
- * @param [string] $new_post_type The new post type.
- * @return [int|false] The number of rows updated, or false on error.
+ * @param string $old_post_type The old post type.
+ * @param string $new_post_type The new post type.
+ * @return int|false The number of rows updated, or false on error.
  */
 function joist_convert_post_type( $old_post_type, $new_post_type ) {
 	global $wpdb;
@@ -60,9 +60,9 @@ function joist_convert_post_type( $old_post_type, $new_post_type ) {
 /**
  * Converts multiple meta_keys for a given post_type from one value to another.
  *
- * @param [string] $post_type The post type.
- * @param [array]  $meta_key_map An associative array of old => new meta keys.
- * @return [array] An array of query results for each updated key.
+ * @param string $post_type The post type.
+ * @param array  $meta_key_map An associative array of old => new meta keys.
+ * @return array An array of query results for each updated key.
  */
 function joist_convert_postmeta( $post_type, $meta_key_map ) {
 	global $wpdb;
@@ -90,9 +90,9 @@ SQL;
 /**
  * Deletes postmeta matching the given meta_keys for a particular post_type.
  *
- * @param [string] $post_type The post type.
- * @param [array]  $meta_keys One or more meta_keys.
- * @return [int|false] The number of rows deleted, or false on error.
+ * @param string $post_type The post type.
+ * @param array  $meta_keys One or more meta_keys.
+ * @return int|false The number of rows deleted, or false on error.
  */
 function joist_delete_postmeta( $post_type, $meta_keys ) {
 	global $wpdb;
