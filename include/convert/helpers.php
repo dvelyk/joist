@@ -14,21 +14,17 @@
  */
 function joist_insert_unique_terms( $taxonomy, $terms ) {
 	// Get a list of all existing terms by slug for this taxonomy.
-	$existing_terms = array_map(
-		function( $term ) {
-			return $term->slug;
-		},
-		get_terms(
-			[
-				'taxonomy'   => $taxonomy,
-				'hide_empty' => false,
-			]
-		)
+	$query = new WP_Term_Query(
+		[
+			'taxonomy'   => $taxonomy,
+			'fields'     => 'slugs',
+			'hide_empty' => false,
+		]
 	);
 
 	// Insert terms that do not yet exist.
 	foreach ( $terms as $new_term_slug => $new_term_name ) {
-		if ( ! in_array( $existing_terms, $new_term_slug, true ) ) {
+		if ( ! in_array( $new_term_slug, $query->terms, true ) ) {
 			wp_insert_term(
 				$new_term_name,
 				$taxonomy,
@@ -55,6 +51,93 @@ function joist_convert_post_type( $old_post_type, $new_post_type ) {
 		[ '%s' ],
 		[ '%s' ]
 	);
+}
+
+/**
+ * Moves all terms to a new taxonomy, which must be registered first.
+ *
+ * @param string $old_taxonomy The existing taxonomy name.
+ * @param string $new_taxonomy The new taxonomy name.
+ * @return int|false The number of rows updated, or false on error.
+ */
+function joist_move_taxonomy_terms( $old_taxonomy, $new_taxonomy ) {
+	global $wpdb;
+
+	return $wpdb->update(
+		$wpdb->term_taxonomy,
+		[ 'taxonomy' => $new_taxonomy ],
+		[ 'taxonomy' => $old_taxonomy ],
+		[ '%s' ],
+		[ '%s' ]
+	);
+}
+
+/**
+ * Move content from one taxonomy term to another.
+ *
+ * @param string $post_type The type of content to move.
+ * @param string $taxonomy The name of the taxonomy.
+ * @param array  $term_map A map of old taxonomy terms and new (existing) ones.
+ * @param string $field The type of field the map is using (e.g. id or slug).
+ * @return void
+ */
+function joist_reorganize_content( $post_type, $taxonomy, $term_map,
+	$field = 'slug' ) {
+
+	foreach ( $term_map as $old_term => $new_term ) {
+		$query = new WP_Query(
+			[
+				'fields'         => 'ids',
+				'posts_per_page' => -1,
+				'post_type'      => $post_type,
+				'tax_query'      =>
+					[
+						[
+							'taxonomy' => $taxonomy,
+							'field'    => $field,
+							'terms'    => $old_term,
+						],
+					],
+			]
+		);
+
+		foreach ( $query->posts as $id ) {
+			wp_remove_object_terms( $id, $old_term, $taxonomy );
+			wp_add_object_terms( $id, $new_term, $taxonomy );
+		}
+	}
+}
+
+/**
+ * Deletes the specified terms for the given taxonomy. If no terms are
+ * provided, *all* terms will be deleted!
+ *
+ * @param string     $taxonomy Name of the taxonomy.
+ * @param array|null $terms An optional array of term ids or slugs.
+ * @return void
+ */
+function joist_delete_terms( $taxonomy, $terms = null ) {
+	if ( is_array( $terms ) ) {
+		foreach ( $terms as $term ) {
+			$id = term_exists( $term, $taxonomy );
+
+			if ( is_array( $id ) ) {
+				wp_delete_term( $id['term_id'], $taxonomy );
+			}
+		}
+	} else {
+		$query = new WP_Term_Query(
+			[
+				'taxonomy'   => $taxonomy,
+				'fields'     => 'ids',
+				'hide_empty' => false,
+			]
+		);
+
+		foreach ( $query->terms as $id ) {
+			wp_delete_term( $id, $taxonomy );
+		}
+	}
 }
 
 /**
