@@ -180,25 +180,18 @@ SQL;
 function joist_delete_postmeta( $post_type, $meta_keys ) {
 	global $wpdb;
 
-	// Create an array of string placeholders for each meta key.
-	$placeholders = implode(
-		', ',
-		array_fill( 0, count( $meta_keys ), '%s' )
-	);
-
 	if ( '*' === $post_type ) {
-		// Delete matching meta_keys for all post types.
-
-		// Assemble the SQL query to prepare.
-		$sql = <<<SQL
-			DELETE FROM $wpdb->postmeta
-			WHERE meta.meta_key IN ($placeholders)
-SQL;
-		// Prepare the query.
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		$query = $wpdb->prepare( $sql, $meta_keys );
+		foreach ( $meta_keys as $key ) {
+			delete_metadata( 'post', 0, $key, false, true );
+		}
 	} else {
 		// Delete matching meta_keys for one post type only.
+
+		// Create an array of string placeholders for each meta key.
+		$placeholders = implode(
+			', ',
+			array_fill( 0, count( $meta_keys ), '%s' )
+		);
 
 		// Assemble the SQL query to prepare.
 		$sql = <<<SQL
