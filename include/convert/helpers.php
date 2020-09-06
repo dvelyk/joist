@@ -212,3 +212,39 @@ SQL;
 	// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	return $wpdb->query( $query );
 }
+
+/**
+ * Converts the format of datetime meta_values for the given meta_key and
+ * post_type.
+ *
+ * @param string $post_type The name of the post type.
+ * @param string $meta_key The name of the meta key.
+ * @param string $old_format The old MySQL datetime format.
+ * @param string $new_format The new MySQL datetime format.
+ * @return int|false The number of rows updated, or false on error.
+ */
+function joist_update_datetime_format( $post_type, $meta_key, $old_format,
+	$new_format ) {
+	global $wpdb;
+
+	$sql = <<<SQL
+		UPDATE $wpdb->postmeta AS meta
+		INNER JOIN $wpdb->posts AS posts ON posts.ID = meta.post_id
+		SET
+			meta_value = IF(
+				meta_value,
+				DATE_FORMAT(STR_TO_DATE(meta_value, %s), %s),
+				''
+			)
+		WHERE posts.post_type = %s AND meta.meta_key = %s
+SQL;
+
+	$sql = $wpdb->prepare(
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$sql,
+		[ $old_format, $new_format, $post_type, $meta_key ]
+	);
+
+	// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	return $wpdb->query( $sql );
+}
