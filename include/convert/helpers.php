@@ -22,9 +22,11 @@ function joist_insert_unique_terms( $taxonomy, $terms ) {
 		]
 	);
 
+	$existing_terms = $query->terms ? $query->terms : [];
+
 	// Insert terms that do not yet exist.
 	foreach ( $terms as $new_term_slug => $new_term_name ) {
-		if ( ! in_array( $new_term_slug, $query->terms, true ) ) {
+		if ( ! in_array( $new_term_slug, $existing_terms, true ) ) {
 			wp_insert_term(
 				$new_term_name,
 				$taxonomy,
@@ -134,8 +136,10 @@ function joist_delete_terms( $taxonomy, $terms = null ) {
 			]
 		);
 
-		foreach ( $query->terms as $id ) {
-			wp_delete_term( $id, $taxonomy );
+		if ( is_array( $query->terms ) ) {
+			foreach ( $query->terms as $id ) {
+				wp_delete_term( $id, $taxonomy );
+			}
 		}
 	}
 }
@@ -206,11 +210,11 @@ SQL;
 			$sql,
 			array_merge( [ $post_type ], $meta_keys )
 		);
-	}
 
-	// Execute.
-	// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-	return $wpdb->query( $query );
+		// Execute.
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		return $wpdb->query( $query );
+	}
 }
 
 /**
@@ -228,8 +232,8 @@ function joist_update_datetime_format( $post_type, $meta_key, $old_format,
 	global $wpdb;
 
 	$sql = <<<SQL
-		UPDATE $wpdb->postmeta AS meta
-		INNER JOIN $wpdb->posts AS posts ON posts.ID = meta.post_id
+		UPDATE $wpdb->postmeta meta
+		INNER JOIN $wpdb->posts posts ON posts.ID = meta.post_id
 		SET
 			meta_value = IF(
 				meta_value,
