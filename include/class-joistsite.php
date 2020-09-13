@@ -1,5 +1,7 @@
 <?php
 
+include_once( __DIR__ . '/utils/carbon.php' );
+
 class JoistSite extends TimberSite {
 	private $front_page_id;
 
@@ -10,6 +12,7 @@ class JoistSite extends TimberSite {
 		add_theme_support( 'post-thumbnails' );
 		add_theme_support( 'menus' );
 		add_theme_support( 'html5', [ 'comment-list', 'comment-form', 'search-form', 'gallery', 'caption' ] );
+		remove_theme_support( 'core-block-patterns' );
 
 		add_filter( 'get_twig', [ $this, 'add_to_twig' ] );
 
@@ -32,6 +35,7 @@ class JoistSite extends TimberSite {
 		add_action( 'widgets_init', [ $this, 'register_widgets' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 		add_filter( 'body_class', [ $this, 'add_slug_to_body_class' ] );
+		add_filter( 'allowed_block_types', [ $this, 'allowed_block_types' ], 10, 2 );
 
 		// Configure Carbon Fields
 		\Carbon_Fields\Carbon_Fields::boot();
@@ -122,6 +126,43 @@ class JoistSite extends TimberSite {
 			'example' => Timber::get_widgets( 'joist_example' ),
 			// 'footer'  => Timber::get_widgets( 'footer' ),
 		] );
+	}
+
+	public function allowed_block_types( $allowed_blocks, $post ) {
+		$allowed_blocks = [
+			'core/image',
+			'core/paragrpah',
+			'core/heading',
+			'core/list',
+			'core/audio',
+			'core/file',
+			'core/video',
+			'core/table',
+			'core/freeform',
+			'core/html',
+			'core/pullquote',
+			'core/preformatted',
+			'core/code',
+			'core/more',
+			'core/shortcode',
+
+			'core-embed/slideshare',
+			'core-embed/vimeo',
+			'core-embed/youtube',
+			'core-embed/twitter',
+			'core-embed/instagram',
+			'core-embed/facebook',
+
+			// TODO: Needs formatting?
+			'core/search',
+			'core/gallery',
+			'core/quote',
+			'core/button',
+			'core/separator',
+			'core/spacer',
+		];
+
+		return $allowed_blocks;
 	}
 
 	/**
