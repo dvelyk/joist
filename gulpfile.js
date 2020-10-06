@@ -1,5 +1,6 @@
 const gulp = require('gulp');
 const autoprefixer = require('gulp-autoprefixer');
+const browserSync = require('browser-sync').create();
 const header = require('gulp-header');
 const sass = require('gulp-sass');
 const pkg = require('./package.json');
@@ -24,7 +25,8 @@ function cssDebug() {
             outputStyle: 'expanded',
         }).on('error', sass.logError))
         .pipe(autoprefixer())
-        .pipe(gulp.dest('.', { sourcemaps: true }));
+        .pipe(gulp.dest('.', { sourcemaps: true }))
+        .pipe(browserSync.reload({ stream: true }));
 }
 
 function cssProd() {
@@ -40,5 +42,10 @@ function cssProd() {
 exports.css = gulp.parallel(cssDebug);
 exports.build = gulp.parallel(cssProd);
 exports.default = exports.watch = function() {
+    browserSync.init({
+        proxy: "pvn.test",
+        open: false,
+        port: 3001,
+    });
     gulp.watch(SCSS_INPUT, cssDebug);
 }
