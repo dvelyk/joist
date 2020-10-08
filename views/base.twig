@@ -32,6 +32,21 @@
 					<nav id="nav-main" class="nav-main" role="navigation">
 						{% include "menu.twig" with {'menu': menu.get_items} %}
 					</nav>
+					{% if not is_home %}
+						{% set breadcrumbs = post|get_breadcrumbs %}
+						<ul class="header__breadcrumbs">
+							<li><a href="/">Home</a></li>
+							{% for crumb in breadcrumbs %}
+								{% if crumb.href %}
+									<li><a href="{{ crumb.href }}">
+										{{ crumb.text }}
+									</a></li>
+								{% else %}
+									<li class="current">{{ crumb.text }}</li>
+								{% endif %}
+							{% endfor %}
+						</ul>
+					{% endif %}
 				</div>
 			{% endblock %}
 		</header>

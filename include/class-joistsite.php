@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/utils/carbon.php';
+require_once __DIR__ . '/utils/content.php';
 require_once __DIR__ . '/utils/query.php';
 
 class JoistSite extends TimberSite {
@@ -116,6 +117,10 @@ class JoistSite extends TimberSite {
 		// Add custom functions to Twig
 
 		$twig->addExtension( new WidontTwigExtension() );
+
+		$twig->addFilter(
+			new \Twig\TwigFilter( 'get_breadcrumbs', 'joist_get_breadcrumbs' )
+		);
 
 		return $twig;
 	}
