@@ -2,13 +2,24 @@
 
 {% block content %}
 	<div class="content-wrapper">
-		<article class="post-type-{{post.post_type}}" id="post-{{post.ID}}">
+		{% if post.post_type == 'page' %}
+		<article class="page post-type-{{post.post_type}}" id="post-{{post.ID}}">
+		{% else %}
+		<div class="page">
+		{% endif %}
 			<section class="article-content">
-				<h1 class="article-h1">{{post.title}}</h1>
+				<h1 class="article-h1">{% block heading %}{{post.title}}{% block heading %}</h1>
 				<div class="article-body">
+					{% block page_content %}
 					{{post.content}}
+					{% endblock %}
 				</div>
 			</section>
+		{% if post.post_type == 'page' %}
+		</article>
+		{% else %}
+		</div>
+		{% endif %}
 		</article>
 	</div><!-- /content-wrapper -->
 {% endblock %}

@@ -1,9 +1,14 @@
-{% extends "base.twig" %}
+{% extends "page.twig" %}
 
-{% block content %}
+{% block heading %}
+	{% if post.title %}{{ post.title }}
+	{% elseif is_search %}Search results
+	{% endif %}
+{% endblock %}
+
+{% block page_content %}
 	{% for post in posts %}
 		{% include ['tease-'~post.post_type~'.twig', 'tease.twig'] %}
 	{% endfor %}
-
 	{% include 'partial/pagination.twig' with { pagination: posts.pagination({show_all: false, mid_size: 3, end_size: 2}) } %}
 {% endblock %}
