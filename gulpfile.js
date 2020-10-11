@@ -25,7 +25,7 @@ function cssDebug() {
             outputStyle: 'expanded',
         }).on('error', sass.logError))
         .pipe(autoprefixer())
-        .pipe(gulp.dest('.', { sourcemaps: true }))
+        .pipe(gulp.dest('.', { sourcemaps: '.' }))
         .pipe(browserSync.reload({ stream: true }));
 }
 
