@@ -1,6 +1,7 @@
 <?php
 
-include_once( __DIR__ . '/utils/carbon.php' );
+require_once __DIR__ . '/utils/carbon.php';
+require_once __DIR__ . '/utils/query.php';
 
 class JoistSite extends TimberSite {
 	private $front_page_id;

@@ -38,3 +38,9 @@ function joist_get_field_options( $post_id, $field_name, $options,
 
 	return $values;
 }
+
+function joist_filter_carbon_fields_options_by_title( $query_args ) {
+	$query_args['search_terms'] = $query_args['s'];
+
+	return $query_args;
+}
