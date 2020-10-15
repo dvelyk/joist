@@ -41,26 +41,96 @@ function joist_get_custom_archive_crumb( $post ) {
 function joist_get_breadcrumbs( $post, $link_current = false ) {
 	$crumbs = [];
 
-	if ( is_archive() && ! is_tax() && ! is_category() && ! is_tag() ) {
+	if ( empty( $post ) ) {
+		if ( is_archive() && ! is_tax() && ! is_category() && ! is_tag() ) {
 
-		$crumbs[] = joist_make_crumb( post_type_archive_title( '', false ) );
+			$crumbs[] = joist_make_crumb( post_type_archive_title( '', false ) );
 
-	} elseif ( is_archive() && is_tax() && ! is_category() && ! is_tag() ) {
+		} elseif ( is_archive() && is_tax() && ! is_category() && ! is_tag() ) {
 
-		$archive_crumb = joist_get_custom_archive_crumb( $post );
+			$archive_crumb = joist_get_custom_archive_crumb( $post );
 
-		if ( is_array( $archive_crumb ) ) {
-			$crumbs[] = $archive_crumb;
+			if ( is_array( $archive_crumb ) ) {
+				$crumbs[] = $archive_crumb;
+			}
+
+			$custom_tax_name = get_queried_object()->name;
+
+			$crumbs[] = joist_make_crumb( $custom_tax_name );
+
+		} elseif ( is_category() ) {
+
+			$crumbs = pvn_get_breadcrumbs(
+				get_post( get_option( 'page_for_posts' ) ),
+				true
+			);
+
+			$crumbs[] = joist_make_crumb(
+				sprintf(
+					// translators: name of category.
+					__( 'Category: %s', 'pvn' ),
+					single_cat_title( '', false )
+				)
+			);
+
+		} elseif ( is_tag() ) {
+
+			$terms = get_terms(
+				'post_tag',
+				'include=' . get_query_var( 'tag_id' )
+			);
+
+			$crumbs[] = joist_make_crumb( $terms[0]->name );
+
+		} elseif ( is_day() ) {
+
+			$year  = get_the_time( 'Y', $post );
+			$month = get_the_time( 'm', $post );
+
+			$crumbs[] = joist_make_crumb( $year, get_year_link( $year ) );
+
+			$crumbs[] = joist_make_crumb(
+				get_the_time( 'M', $post ),
+				get_month_link( $year, $month )
+			);
+
+			$crumbs[] = joist_make_crumb( get_the_time( 'jS', $post ) );
+
+		} elseif ( is_month() ) {
+
+			$year  = get_the_time( 'Y', $post );
+			$month = get_the_time( 'm', $post );
+
+			$crumbs[] = joist_make_crumb( $year, get_year_link( $year ) );
+
+			$crumbs[] = joist_make_crumb( get_the_time( 'M', $post ) );
+
+		} elseif ( is_year() ) {
+
+			$crumbs[] = joist_make_crumb( get_the_time( 'Y', $post ) );
+
+		} elseif ( is_author() ) {
+
+			global $author;
+			$userdata = get_userdata( $author );
+
+			$crumbs[] = joist_make_crumb( 'Author: ' . $userdata->display_name );
+
+		} elseif ( get_query_var( 'paged' ) ) {
+
+			$crumbs[] = joist_make_crumb( 'Page ' . get_query_var( 'paged' ) );
+
+		} elseif ( is_search() ) {
+
+			$crumbs[] = joist_make_crumb(
+				'Search results for: ' . get_search_query()
+			);
+
+		} elseif ( is_404() ) {
+
+			$crumbs[] = joist_make_crumb( '404: Not Found' );
+
 		}
-
-		$custom_tax_name = get_queried_object()->name;
-
-		$crumbs[] = joist_make_crumb( $custom_tax_name );
-
-	} elseif ( is_category() ) {
-
-		$crumbs[] = joist_make_crumb( single_cat_title( '', false ) );
-
 	} elseif ( 'page' === $post->post_type ) {
 
 		$ancestor_ids = array_reverse( get_post_ancestors( $post->ID ) );
@@ -77,62 +147,6 @@ function joist_get_breadcrumbs( $post, $link_current = false ) {
 			$link_current ? get_permalink( $post->ID ) : null
 		);
 
-	} elseif ( is_tag() ) {
-
-		$terms = get_terms(
-			'post_tag',
-			'include=' . get_query_var( 'tag_id' )
-		);
-
-		$crumbs[] = joist_make_crumb( $terms[0]->name );
-
-	} elseif ( is_day() ) {
-
-		$year  = get_the_time( 'Y', $post );
-		$month = get_the_time( 'm', $post );
-
-		$crumbs[] = joist_make_crumb( $year, get_year_link( $year ) );
-
-		$crumbs[] = joist_make_crumb(
-			get_the_time( 'M', $post ),
-			get_month_link( $year, $month )
-		);
-
-		$crumbs[] = joist_make_crumb( get_the_time( 'jS', $post ) );
-
-	} elseif ( is_month() ) {
-
-		$year  = get_the_time( 'Y', $post );
-		$month = get_the_time( 'm', $post );
-
-		$crumbs[] = joist_make_crumb( $year, get_year_link( $year ) );
-
-		$crumbs[] = joist_make_crumb( get_the_time( 'M', $post ) );
-
-	} elseif ( is_year() ) {
-
-		$crumbs[] = joist_make_crumb( get_the_time( 'Y', $post ) );
-
-	} elseif ( is_author() ) {
-
-		global $author;
-		$userdata = get_userdata( $author );
-
-		$crumbs[] = joist_make_crumb( 'Author: ' . $userdata->display_name );
-
-	} elseif ( get_query_var( 'paged' ) ) {
-
-		$crumbs[] = joist_make_crumb( 'Page ' . get_query_var( 'paged' ) );
-
-	} elseif ( is_search() ) {
-
-		$crumbs[] = joist_make_crumb(
-			'Search results for: ' . get_search_query()
-		);
-
-	} elseif ( is_404() ) {
-
-		$crumbs[] = joist_make_crumb( '404: Not Found' );
 	} else {
 		switch ( $post->post_type ) {
 			default:
