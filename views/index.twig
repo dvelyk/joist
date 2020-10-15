@@ -3,8 +3,6 @@
 {% block heading %}
 	{% if post.title %}
 		{{ post.title }}
-	{% elseif is_search %}
-		{{ __( 'Search results', 'pvn') }}
 	{% elseif is_category %}
 		{{ __( 'Category: %s', 'pvn' )|format(title) }}
 	{% else %}

@@ -38,7 +38,11 @@ function joist_get_custom_archive_crumb( $post ) {
  * @param bool    $link_current Whether to link the last breadcrumb.
  * @return [WP_Post] An array of ancestor pages.
  */
-function joist_get_breadcrumbs( $post, $link_current = false ) {
+function joist_get_breadcrumbs( $post, $link_current = false, $paged = true ) {
+	$paged = $paged ? get_query_var( 'paged' ) : false;
+
+	$link_current = $link_current || ( $paged && 1 !== $paged );
+
 	$crumbs = [];
 
 	if ( empty( $post ) ) {
@@ -60,17 +64,19 @@ function joist_get_breadcrumbs( $post, $link_current = false ) {
 
 		} elseif ( is_category() ) {
 
-			$crumbs = pvn_get_breadcrumbs(
+			$crumbs = joist_get_breadcrumbs(
 				get_post( get_option( 'page_for_posts' ) ),
-				true
+				true,
+				false
 			);
 
 			$crumbs[] = joist_make_crumb(
 				sprintf(
 					// translators: name of category.
-					__( 'Category: %s', 'pvn' ),
+					__( 'Category: %s', 'joist' ),
 					single_cat_title( '', false )
-				)
+				),
+				$paged ? get_category_link( get_queried_object() ) : null
 			);
 
 		} elseif ( is_tag() ) {
@@ -116,10 +122,6 @@ function joist_get_breadcrumbs( $post, $link_current = false ) {
 
 			$crumbs[] = joist_make_crumb( 'Author: ' . $userdata->display_name );
 
-		} elseif ( get_query_var( 'paged' ) ) {
-
-			$crumbs[] = joist_make_crumb( 'Page ' . get_query_var( 'paged' ) );
-
 		} elseif ( is_search() ) {
 
 			$crumbs[] = joist_make_crumb(
@@ -131,6 +133,7 @@ function joist_get_breadcrumbs( $post, $link_current = false ) {
 			$crumbs[] = joist_make_crumb( '404: Not Found' );
 
 		}
+
 	} elseif ( 'page' === $post->post_type ) {
 
 		$ancestor_ids = array_reverse( get_post_ancestors( $post->ID ) );
@@ -163,6 +166,12 @@ function joist_get_breadcrumbs( $post, $link_current = false ) {
 		);
 
 		// TODO: Add category info?
+	}
+
+	if ( $paged && '1' !== $paged ) {
+
+		$crumbs[] = joist_make_crumb( 'Page ' . $paged );
+
 	}
 
 	return $crumbs;
