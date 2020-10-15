@@ -46,3 +46,19 @@ function joist_search_by_title( $search, $wp_query ) {
 }
 
 add_filter( 'posts_search', 'joist_search_by_title', 10, 2 );
+
+
+function joist_limit_month_archive_to_year( $sql_where, $args ) {
+	global $wpdb;
+
+	if ( 'monthly' === $args['type'] && ! empty( $args['year'] ) ) {
+		$sql_where .= $wpdb->prepare(
+			' AND YEAR(post_date) = %s',
+			$args['year']
+		);
+	}
+
+	return $sql_where;
+}
+
+add_filter( 'getarchives_where', 'joist_limit_month_archive_to_year', 10, 2 );

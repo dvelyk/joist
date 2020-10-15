@@ -48,8 +48,55 @@ function joist_get_breadcrumbs( $post, $link_current = false, $paged = true ) {
 	if ( empty( $post ) ) {
 		if ( is_archive() && ! is_tax() && ! is_category() && ! is_tag() ) {
 
-			$crumbs[] = joist_make_crumb( post_type_archive_title( '', false ) );
+			$crumbs = joist_get_breadcrumbs(
+				get_post( get_option( 'page_for_posts' ) ),
+				true,
+				false
+			);
 
+			$year  = get_the_time( 'Y', $post );
+			$month = get_the_time( 'm', $post );
+			$day   = get_the_time( 'd', $post );
+
+			$month_name = get_the_time( 'F', $post );
+			$day_name   = get_the_time( 'jS', $post );
+
+			$year_link  = get_year_link( $year );
+			$month_link = get_month_link( $year, $month );
+			$day_link   = get_day_link( $year, $month, $day );
+
+			if ( is_day() ) {
+
+				$crumbs[] = joist_make_crumb( $year, $year_link );
+
+				$crumbs[] = joist_make_crumb( $month_name, $month_link );
+
+				$crumbs[] = joist_make_crumb(
+					$day_name,
+					$paged ? $day_link : null
+				);
+
+			} elseif ( is_month() ) {
+
+				$crumbs[] = joist_make_crumb( $year, $year_link );
+
+				$crumbs[] = joist_make_crumb(
+					$month_name,
+					$paged ? $month_link : null
+				);
+
+			} elseif ( is_year() ) {
+
+				$crumbs[] = joist_make_crumb(
+					$year,
+					$paged ? $year_link : null
+				);
+
+			} else {
+
+				$crumbs[] = joist_make_crumb( post_type_archive_title( '', false ) );
+
+			}
 		} elseif ( is_archive() && is_tax() && ! is_category() && ! is_tag() ) {
 
 			$archive_crumb = joist_get_custom_archive_crumb( $post );
@@ -88,33 +135,6 @@ function joist_get_breadcrumbs( $post, $link_current = false, $paged = true ) {
 
 			$crumbs[] = joist_make_crumb( $terms[0]->name );
 
-		} elseif ( is_day() ) {
-
-			$year  = get_the_time( 'Y', $post );
-			$month = get_the_time( 'm', $post );
-
-			$crumbs[] = joist_make_crumb( $year, get_year_link( $year ) );
-
-			$crumbs[] = joist_make_crumb(
-				get_the_time( 'M', $post ),
-				get_month_link( $year, $month )
-			);
-
-			$crumbs[] = joist_make_crumb( get_the_time( 'jS', $post ) );
-
-		} elseif ( is_month() ) {
-
-			$year  = get_the_time( 'Y', $post );
-			$month = get_the_time( 'm', $post );
-
-			$crumbs[] = joist_make_crumb( $year, get_year_link( $year ) );
-
-			$crumbs[] = joist_make_crumb( get_the_time( 'M', $post ) );
-
-		} elseif ( is_year() ) {
-
-			$crumbs[] = joist_make_crumb( get_the_time( 'Y', $post ) );
-
 		} elseif ( is_author() ) {
 
 			global $author;
@@ -133,7 +153,6 @@ function joist_get_breadcrumbs( $post, $link_current = false, $paged = true ) {
 			$crumbs[] = joist_make_crumb( '404: Not Found' );
 
 		}
-
 	} elseif ( 'page' === $post->post_type ) {
 
 		$ancestor_ids = array_reverse( get_post_ancestors( $post->ID ) );
@@ -164,8 +183,6 @@ function joist_get_breadcrumbs( $post, $link_current = false, $paged = true ) {
 			$post->post_title,
 			$link_current ? get_the_permalink( $post->ID ) : null
 		);
-
-		// TODO: Add category info?
 	}
 
 	if ( $paged && '1' !== $paged ) {

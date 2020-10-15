@@ -23,14 +23,22 @@ $context = Timber::get_context();
 
 $context['title'] = 'Archive';
 if ( is_day() ) {
-	$context['title'] = 'Archive: ' . get_the_date( 'D M Y' );
+	$context['title'] = 'Archive: ' . get_the_date( 'd F Y' );
+	$context['year'] = get_the_date( 'Y' );
+	$context['month'] = get_the_date( 'm' );
 	$context['is_day_archive'] = true;
+	$context['is_date_archive'] = true;
 } elseif ( is_month() ) {
-	$context['title'] = 'Archive: ' . get_the_date( 'M Y' );
+	$context['title'] = 'Archive: ' . get_the_date( 'F Y' );
+	$context['year'] = get_the_date( 'Y' );
+	$context['month'] = get_the_date( 'm' );
 	$context['is_month_archive'] = true;
+	$context['is_date_archive'] = true;
 } elseif ( is_year() ) {
 	$context['title'] = 'Archive: ' . get_the_date( 'Y' );
+	$context['year'] = get_the_date( 'Y' );
 	$context['is_year_archive'] = true;
+	$context['is_date_archive'] = true;
 } elseif ( is_tag() ) {
 	$context['title'] = single_tag_title( '', false );
 	$context['is_tag'] = true;
