@@ -24,14 +24,21 @@ $context = Timber::get_context();
 $context['title'] = 'Archive';
 if ( is_day() ) {
 	$context['title'] = 'Archive: ' . get_the_date( 'D M Y' );
+	$context['is_day_archive'] = true;
 } elseif ( is_month() ) {
 	$context['title'] = 'Archive: ' . get_the_date( 'M Y' );
+	$context['is_month_archive'] = true;
 } elseif ( is_year() ) {
 	$context['title'] = 'Archive: ' . get_the_date( 'Y' );
+	$context['is_year_archive'] = true;
 } elseif ( is_tag() ) {
 	$context['title'] = single_tag_title( '', false );
+	$context['is_tag'] = true;
+	$context['archive_term'] = new Timber\Term();
 } elseif ( is_category() ) {
 	$context['title'] = single_cat_title( '', false );
+	$context['is_category'] = true;
+	$context['archive_term'] = new Timber\Term();
 	array_unshift( $templates, 'archive-' . get_query_var( 'cat' ) . '.twig' );
 } elseif ( is_post_type_archive() ) {
 	$context['title'] = post_type_archive_title( '', false );
