@@ -3,10 +3,6 @@ jQuery(document).ready(function($) {
   var MENU_ITEM_OPEN_CLASS = 'menu-item--open';
   var prevFocus;
 
-  // Set the js class (remove if using Modernizr)
-  document.documentElement.className =
-  document.documentElement.className.replace("no-js", "js");
-
   $(document.body).addClass(PRELOAD_CLASS);
   window.addEventListener("load", function() {
     $(document.body).removeClass(PRELOAD_CLASS);

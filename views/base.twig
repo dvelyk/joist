@@ -16,6 +16,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="author" href="{{ site.theme.link }}/humans.txt" />
 		<link rel="pingback" href="{{ site.pingback_url }}" />
+		<script type="text/javascript">
+			// Set the js class (remove if using Modernizr)
+			document.documentElement.className =
+			document.documentElement.className.replace("no-js", "js");
+		</script>
 		{{function('wp_head')}}
 		{% block head %}{% endblock %}
 	</head>
