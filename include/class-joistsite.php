@@ -10,7 +10,7 @@ class JoistSite extends TimberSite {
 	public function __construct() {
 		$this->front_page_id = (int) get_option( 'page_on_front' );
 
-		add_theme_support( 'post-formats' );
+		// add_theme_support( 'post-formats' );
 		add_theme_support( 'post-thumbnails' );
 		add_theme_support( 'menus' );
 		add_theme_support( 'html5', [ 'comment-list', 'comment-form', 'search-form', 'gallery', 'caption' ] );
