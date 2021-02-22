@@ -20,13 +20,13 @@
   },
   "homepage": "https://github.com/dvelyk/joist",
   "devDependencies": {
-    "autoprefixer": "9.8.6",
+    "autoprefixer": "10.2.3",
     "browser-sync": "^2.26.12",
     "gulp": "4.0.2",
     "gulp-autoprefixer": "7.0.1",
+    "gulp-dart-sass": "1.0.2",
     "gulp-header": "2.0.9",
-    "gulp-sass": "4.1.0",
-    "node-sass": "4.14.1"
+    "sass": "1.32.5"
   },
   "browserslist": [
     "last 2 versions"

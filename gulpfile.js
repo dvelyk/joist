@@ -2,7 +2,7 @@ const gulp = require('gulp');
 const autoprefixer = require('gulp-autoprefixer');
 const browserSync = require('browser-sync').create();
 const header = require('gulp-header');
-const sass = require('gulp-sass');
+const sass = require('gulp-dart-sass');
 const pkg = require('./package.json');
 
 const SCSS_INPUT = 'static/scss/**/*.scss';
