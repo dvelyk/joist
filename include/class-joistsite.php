@@ -87,7 +87,7 @@ class JoistSite extends TimberSite {
 	public function add_slug_to_body_class( $classes ) {
 		global $post;
 
-		if ( isset( $post ) ) {
+		if ( ( is_page() || is_single() ) && isset( $post ) ) {
 			$classes[] = $post->post_type . '-' . $post->post_name;
 		}
 
