@@ -3,6 +3,7 @@ jQuery(document).ready(function($) {
   var MENU_ITEM_OPEN_CLASS = 'menu-item--open';
   var prevFocus;
   var noTouchTap;
+  var menuButton = $('#nav-main button');
 
   $(document.body).addClass(PRELOAD_CLASS);
   window.addEventListener("load", function() {
@@ -10,7 +11,7 @@ jQuery(document).ready(function($) {
   });
 
   // Main menu button
-  $('#nav-main button').on('click', function() {
+  menuButton.on('click', function() {
     $(document.body).toggleClass("menu-open");
     this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') !== 'true');
   });
@@ -37,7 +38,7 @@ jQuery(document).ready(function($) {
   $(document).on('click', '.menu-item-has-children > a', function(event) {
     var target = $(event.target);
 
-    if (target.is(':hover') || noTouchTap === event.target) {
+    if (menuButton.is(':visible') || target.is(':hover') || noTouchTap === event.target) {
       // Menu already open; Continue with default action
       return;
     }
