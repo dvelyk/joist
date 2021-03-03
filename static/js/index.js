@@ -2,6 +2,7 @@ jQuery(document).ready(function($) {
   var PRELOAD_CLASS = 'js-preload';
   var MENU_ITEM_OPEN_CLASS = 'menu-item--open';
   var prevFocus;
+  var noTouchTap;
 
   $(document.body).addClass(PRELOAD_CLASS);
   window.addEventListener("load", function() {
@@ -62,11 +63,12 @@ jQuery(document).ready(function($) {
   });
 
   // Hide menu when the user clicks outside
-  $(document).on('mousedown', function(event) {
+  $(document).on('mousedown touchend', function(event) {
     var target = $(event.target);
 
     if (target.parents('#menu').length === 0) {
       $('.' + MENU_ITEM_OPEN_CLASS).removeClass(MENU_ITEM_OPEN_CLASS);
+      noTouchTap = null;
     }
   });
 
