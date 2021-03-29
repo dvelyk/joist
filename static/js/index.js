@@ -58,7 +58,7 @@ jQuery(document).ready(function($) {
 
   // Hide menu when escape key pressed
   $(document).on('keyup', function(event) {
-    if (event.key === 'Escape') {
+    if (event.keyCode === 27) {
       $('.' + MENU_ITEM_OPEN_CLASS).removeClass(MENU_ITEM_OPEN_CLASS);
     }
   });
@@ -79,18 +79,18 @@ jQuery(document).ready(function($) {
     var $parent = $(this).parent();
     var item;
 
-    switch (event.key) {
-      case 'ArrowRight':
+    switch (event.keyCode) {
+      case 39:
         item = $parent.next();
 
       break;
 
-      case 'ArrowLeft':
+      case 37:
         item = $parent.prev();
 
       break;
 
-      case 'ArrowDown':
+      case 40:
         // Go into submenu
         item = $parent.find('ul li').first();
 
@@ -109,8 +109,8 @@ jQuery(document).ready(function($) {
     var $parent = $(this).parent();
     var item;
 
-    switch (event.key) {
-      case 'ArrowUp':
+    switch (event.keyCode) {
+      case 38:
         item = $parent.prev();
 
         if (!item.length) {
@@ -120,7 +120,7 @@ jQuery(document).ready(function($) {
 
       break;
 
-      case 'ArrowDown':
+      case 40:
         item = $parent.next();
 
         if (!item.length) {

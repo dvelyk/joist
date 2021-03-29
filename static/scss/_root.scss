@@ -16,3 +16,25 @@
         transition: none !important;
     }
 }
+
+.ie-warning {
+    display: none;
+    font-size: 0.875rem;
+    padding: 0 2rem;
+    margin: auto;
+    max-width: 80rem;
+}
+
+.oldie,
+.ie9 {
+    .ie-warning {
+        display: block !important;
+    }
+}
+
+// IE 11 fixes
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    .ie-warning {
+        display: block !important;
+    }
+}

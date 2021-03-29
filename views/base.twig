@@ -26,7 +26,15 @@
 	</head>
 	<body class="{{body_class}}">
 		<a href="#content" class="skip-to-content">Skip to main content</a>
-		<header class="header" >
+		<div class="ie-warning" style="display: none">
+			<p>
+				We notice that you’re using Internet Explorer, which is no
+				longer supported by Windows and may have difficulty displaying
+				some elements of our website. We recommend that you
+				<a href="https://browsehappy.com/" target="_blank">upgrade your browser</a>.
+			</p>
+		</div>
+		<header class="header">
 			{% block header %}
 				<div class="wrapper">
 					<h1 class="logo" role="banner">
