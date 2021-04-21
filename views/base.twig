@@ -32,7 +32,7 @@
 					<nav id="nav-main" class="nav-main" role="navigation">
 						{% include "menu.twig" with {'menu': menu.get_items} %}
 					</nav>
-					{% if not is_home %}
+					{% if not is_front_page %}
 						{% set breadcrumbs = post|get_breadcrumbs %}
 						<ul class="header__breadcrumbs">
 							<li><a href="/">Home</a></li>

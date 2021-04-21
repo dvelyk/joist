@@ -72,7 +72,7 @@ function joist_get_breadcrumbs( $post ) {
 
 		$crumbs[] = make_crumb( single_cat_title( '', false ) );
 
-	} elseif ( is_page( $post ) ) {
+	} elseif ( is_home() || is_page( $post ) ) {
 
 		$ancestor_ids = array_reverse( get_post_ancestors( $post->ID ) );
 

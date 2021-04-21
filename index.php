@@ -13,16 +13,18 @@
  * @since   Timber 0.1
  */
 
-$templates = [
+$joist_templates = [
 	'index.twig',
 ];
 
+$joist_context = Timber::get_context();
+
 if ( is_home() ) {
-	array_unshift( $templates, 'home.twig' );
+	$joist_context['is_home'] = true;
+
+	array_unshift( $joist_templates, 'pages/home.twig' );
 }
 
-$context = Timber::get_context();
+$joist_context['posts'] = new Timber\PostQuery();
 
-$context['posts'] = new Timber\PostQuery();
-
-Timber::render( $templates, $context );
+Timber::render( $joist_templates, $joist_context );
