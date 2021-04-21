@@ -132,7 +132,7 @@ class JoistSite extends TimberSite {
 	public function allowed_block_types( $allowed_blocks, $post ) {
 		$allowed_blocks = [
 			'core/image',
-			'core/paragrpah',
+			'core/paragraph',
 			'core/heading',
 			'core/list',
 			'core/audio',
@@ -146,6 +146,7 @@ class JoistSite extends TimberSite {
 			'core/code',
 			'core/more',
 			'core/shortcode',
+			'core/latest-posts',
 
 			'core-embed/slideshare',
 			'core-embed/vimeo',
