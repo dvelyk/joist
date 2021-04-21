@@ -2,7 +2,7 @@
 /**
  * Helper utilities for Carbon Fields.
  *
- * @package pvn
+ * @package joist
  */
 
 use Carbon_Fields\Helper\Helper;

@@ -43,7 +43,7 @@ exports.css = gulp.parallel(cssDebug);
 exports.build = gulp.parallel(cssProd);
 exports.default = exports.watch = function() {
     browserSync.init({
-        proxy: "pvn.test",
+        proxy: "joist.test",
         open: false,
         port: 3001,
     });

@@ -2,7 +2,7 @@
 /**
  * Generic WordPress query helpers.
  *
- * @package pvn
+ * @package joist
  */
 
 /**
