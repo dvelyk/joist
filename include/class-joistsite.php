@@ -33,7 +33,7 @@ class JoistSite extends TimberSite {
 		add_action( 'init', [ $this, 'register_shortcodes' ] );
 		add_action( 'init', [ $this, 'register_taxonomies' ] );
 		add_action( 'widgets_init', [ $this, 'register_widgets' ] );
-		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ], 0 );
 		add_filter( 'body_class', [ $this, 'add_slug_to_body_class' ] );
 		add_filter( 'allowed_block_types', [ $this, 'allowed_block_types' ], 10, 2 );
 
@@ -179,7 +179,19 @@ class JoistSite extends TimberSite {
 	}
 
 	public function enqueue_scripts() {
-		wp_enqueue_script( 'joist', get_template_directory_uri() . '/static/js/index.js', [ 'jquery' ], 'version', true );
+		wp_enqueue_style(
+			'joist-theme',
+			get_template_directory_uri() . '/style.css',
+			[],
+			filemtime( get_template_directory() . '/style.css' )
+		);
+
+		wp_enqueue_script(
+			'joist-scripts',
+			get_template_directory_uri() . '/static/js/index.js',
+			[ 'jquery' ],
+			filemtime( get_template_directory() . '/static/js/index.js' )
+		);
 	}
 
 	public function register_fields() {
