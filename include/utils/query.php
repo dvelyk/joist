@@ -14,6 +14,10 @@
  * @param WP_Query $wp_query The existing query.
  */
 function joist_search_by_title( $search, $wp_query ) {
+	if ( ! is_admin() ) {
+		return $search;
+	}
+
 	$q = $wp_query->query_vars;
 
 	if ( ! empty( $search ) && ! empty( $wp_query->query_vars['search_terms'] ) ) {

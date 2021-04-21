@@ -151,6 +151,7 @@ function joist_get_breadcrumbs( $post, $link_current = false, $paged = true ) {
 		} elseif ( is_404() ) {
 
 			$crumbs[] = joist_make_crumb( '404: Not Found' );
+			return $crumbs;
 
 		}
 	} elseif ( 'page' === $post->post_type ) {
