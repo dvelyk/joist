@@ -87,25 +87,44 @@ function joist_reorganize_content( $post_type, $taxonomy, $term_map,
 	$field = 'slug' ) {
 
 	foreach ( $term_map as $old_term => $new_term ) {
-		$query = new WP_Query(
-			[
-				'fields'         => 'ids',
-				'posts_per_page' => -1,
-				'post_type'      => $post_type,
-				'tax_query'      =>
+		$args = [
+			'fields'         => 'ids',
+			'posts_per_page' => -1,
+			'post_type'      => $post_type,
+			'tax_query'      =>
+				[
 					[
-						[
-							'taxonomy' => $taxonomy,
-							'field'    => $field,
-							'terms'    => $old_term,
-						],
+						'taxonomy' => $taxonomy,
+						'field'    => $field,
+						'terms'    => $old_term,
 					],
-			]
+				],
+		];
+
+		if ( 'tribe_events' === $post_type ) {
+			// Remove The Events Calendar cruft from the query.
+			$args['eventDisplay'] = 'custom';
+			add_filter(
+				'tribe_events_query_include_start_date_meta',
+				'__return_false'
+			);
+		}
+
+		$query = new WP_Query(
+			$args
 		);
 
 		foreach ( $query->posts as $id ) {
 			wp_remove_object_terms( $id, $old_term, $taxonomy );
 			wp_add_object_terms( $id, $new_term, $taxonomy );
+		}
+
+		if ( 'tribe_events' === $post_type ) {
+			// Reset filters.
+			remove_filter(
+				'tribe_events_query_include_start_date_meta',
+				'__return_false'
+			);
 		}
 	}
 }
